@@ -3,16 +3,17 @@ import { useHistory } from 'react-router';
 import { Layout, Menu, Row } from 'antd';
 
 import { RoutesNames } from '../router';
+import { useTypedSelector } from '../hooks/useTypedSelector';
 
 const Navbar: React.FC = () => {
     const history = useHistory();
 
-    const auth = true;
+    const { isAuth } = useTypedSelector(state => state.auth);
 
     return (
         <Layout.Header>
             <Row justify="end" align="middle">
-                {auth ?
+                {isAuth ?
                 <>
                     <div style={{ color: 'white' }}>
                         USERNAME

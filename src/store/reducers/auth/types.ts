@@ -6,7 +6,7 @@ export enum AuthActionsEnum {
     SET_AUTH = 'SET_AUTH',
 }
 
-interface SetAuthAction {
+export interface SetAuthAction {
     type: AuthActionsEnum.SET_AUTH;
     payload: boolean;
 }
