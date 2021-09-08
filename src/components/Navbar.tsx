@@ -4,13 +4,14 @@ import { useDispatch } from 'react-redux';
 import { Layout, Menu, Row } from 'antd';
 
 import { RoutesNames } from '../router';
-import { useTypedSelector } from '../hooks/useTypedSelector';
 import { AuthActionCreators } from '../store/reducers/auth/action-creators';
+import { useTypedSelector } from '../hooks/useTypedSelector';
+import { useActions } from '../hooks/useActions';
 
 const Navbar: React.FC = () => {
     const history = useHistory();
     const { isAuth, user } = useTypedSelector(state => state.auth);
-    const dispatch = useDispatch()
+    const { logout } = useActions();
 
     return (
         <Layout.Header>
@@ -22,7 +23,7 @@ const Navbar: React.FC = () => {
                     </div>
                     <Menu theme="dark" mode="vertical" selectable={false}>
                         <Menu.Item 
-                            onClick={() => dispatch(AuthActionCreators.logout())} 
+                            onClick={logout} 
                             key={1}
                         >
                             Logout

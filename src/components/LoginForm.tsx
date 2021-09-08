@@ -5,15 +5,16 @@ import { Button, Form, Input } from 'antd';
 import { rules } from '../utils/rules';
 import {AuthActionCreators} from "../store/reducers/auth/action-creators";
 import { useTypedSelector } from '../hooks/useTypedSelector';
+import { useActions } from '../hooks/useActions';
 
 const LoginForm: React.FC = () => {
-    const dispatch = useDispatch();
     const {isLoading, error} = useTypedSelector(state => state.auth);
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const { login } = useActions();
 
     const submit = () =>{
-        dispatch(AuthActionCreators.login(username, password));
+        login(username, password);
     }
 
     return (
