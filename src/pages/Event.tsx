@@ -3,9 +3,17 @@ import React from 'react';
 
 import EventCalendar from '../components/EventCalendar';
 import EventForm from '../components/EventForm';
+import { useActions } from '../hooks/useActions';
+import { useTypedSelector } from '../hooks/useTypedSelector';
 
 const Event: React.FC = () => {
     const [modalVisible, setModalVisible] = React.useState(false);
+    const { fetchGuests } = useActions();
+    const { guests } = useTypedSelector(state => state.event);
+
+    React.useEffect(() => {
+        fetchGuests();
+    }, []);
 
     return (
         <div>
@@ -23,7 +31,9 @@ const Event: React.FC = () => {
             footer={null}
             onCancel={() => setModalVisible(false)}
             >
-                <EventForm />
+                <EventForm 
+                    guests={guests}
+                />
             </Modal>
         </div>
     );

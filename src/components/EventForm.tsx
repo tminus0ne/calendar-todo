@@ -2,8 +2,21 @@ import React from 'react';
 import { Form, Input, DatePicker, Button, Row, Select } from 'antd';
 
 import { rules } from '../utils/rules';
+import { IUser } from '../models/IUser';
+import { IEvent } from '../models/IEvent';
 
-const EventForm: React.FC = () => {
+interface EventFormProps {
+    guests: IUser[],
+}
+
+const EventForm: React.FC<EventFormProps> = (props) => {
+    const [event, setEvent] = React.useState<IEvent>({
+        author: '',
+        date: '',
+        description: '',
+        guest: '',
+    } as IEvent);
+
     return (
         <Form style={{ padding: 15 }}>
            <Form.Item
@@ -23,14 +36,24 @@ const EventForm: React.FC = () => {
                 <DatePicker />
             </Form.Item>
 
-            <Select>
-                <Select.Option value="jack">Jack</Select.Option>
-                <Select.Option value="lucy">Lucy</Select.Option>
-                <Select.Option value="disabled" disabled>
-                    Disabled
-                </Select.Option>
-                <Select.Option value="Yiminghe">yiminghe</Select.Option>
-            </Select>
+            <Form.Item
+                label="Event creator"
+                name="guest"
+                rules={[rules.required()]}
+            >
+                <Select onChange={(guest: string) => setEvent(
+                    { ...event, guest }
+                    )}>
+                    {props.guests.map(guest => 
+                        <Select.Option 
+                            value={guest.username} 
+                            key={guest.username}
+                        >
+                            {guest.username}
+                        </Select.Option>
+                    )}
+                </Select>
+            </Form.Item>
 
             <Row justify="end">
                 <Form.Item wrapperCol={{ offset: 7, span: 16 }}>
