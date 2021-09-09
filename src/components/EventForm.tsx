@@ -1,12 +1,16 @@
 import React from 'react';
 import { Form, Input, DatePicker, Button, Row, Select } from 'antd';
+import { Moment } from 'moment';
 
-import { rules } from '../utils/rules';
+import { useTypedSelector } from '../hooks/useTypedSelector';
 import { IUser } from '../models/IUser';
 import { IEvent } from '../models/IEvent';
+import { rules } from '../utils/rules';
+import { formatDate } from '../utils/date';
 
 interface EventFormProps {
     guests: IUser[],
+    submit: (event: IEvent) => void,
 }
 
 const EventForm: React.FC<EventFormProps> = (props) => {
@@ -16,15 +20,33 @@ const EventForm: React.FC<EventFormProps> = (props) => {
         description: '',
         guest: '',
     } as IEvent);
+    const { user } = useTypedSelector(state => state.auth)
+
+    const selectDate =(date: Moment | null) => {
+        if(date) {
+            setEvent({ ...event, date: formatDate(date.toDate()) })
+        }
+    }
+
+    const submitForm = () => {
+        props.submit({ ...event, author: user.username });
+    }
 
     return (
-        <Form style={{ padding: 15 }}>
+        <Form 
+        onFinish={submitForm}
+        style={{ padding: 15 }}
+        >
            <Form.Item
                 label="Event description"
                 name="description"
                 rules={[rules.required()]}
             >
-                <Input 
+                <Input
+                value={event.description}
+                onChange={evt => setEvent(
+                    { ...event, description: evt.target.value }
+                )}
                 />
             </Form.Item>
 
@@ -33,7 +55,9 @@ const EventForm: React.FC<EventFormProps> = (props) => {
                 name="date"
                 rules={[rules.required()]}
             >
-                <DatePicker />
+                <DatePicker
+                    onChange={date => selectDate(date)}
+                />
             </Form.Item>
 
             <Form.Item
