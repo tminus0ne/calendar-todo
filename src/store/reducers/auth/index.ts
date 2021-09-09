@@ -9,7 +9,9 @@ const initialState: AuthState = {
 }
 
 
-export default function authReducer(state = initialState, action: AuthAction): AuthState {
+export default function authReducer(
+    state = initialState, action: AuthAction,
+    ): AuthState {
     switch (action.type) {
         case AuthActionsEnum.SET_AUTH: 
             return { ...state, isAuth: action.payload, isLoading: false }
